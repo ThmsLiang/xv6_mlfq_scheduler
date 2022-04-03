@@ -13,3 +13,6 @@ Note: test2 has zombie processes after running, not sure why is that. However, t
 
 ## Test3
 after entering emulator, type `test3` to run and see the result of test3. 
+
+## Graphs
+graphs are files labelled "p3-graph1.pdf", "p3-graph2.pdf" etc.
