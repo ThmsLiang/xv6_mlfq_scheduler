@@ -1,0 +1,47 @@
+NOTE: The MFQ works as required so there may be some confusion with the graphs. 
+For instance, the graphs and getpinfo show processes staying in Q0 for more than 1 tick, etc. 
+This is because the init and other processes go to SLEEP before finishing their timeslice and
+hence remain in the same priority queue. You can double check this with the printStates and
+printNames functions that were commented out in getpinfo. printStates displays the state of a
+process at the END of each tick (i.e if it shows sleeping, that means it didn't use all its 
+timeslice.)
+
+NOTE: If output does not match graph for a test, restart qemu-nox and run again. 
+
+MFQ policies
+    - Created a new Priority Queue structure that stores necessary info:
+        - Queue of processes
+        - Number of processes
+        - The first free index in Queue etc
+    - Made 3 instances of these queues in the kernel for q0, q1 and q2
+    - The scheduler selects the highest priority RUNNABLE process from the appropriate queue
+    - After running a single scheduler inner loop (which is equivalent to a time slice), the process 
+    is either demoted or re-added to the queue as per MFQ specifications
+    - Helper functions were added to help maintain queues, add/remove, find the right process to run, 
+    update stats and so forth. 
+
+
+Priority Boost Mechanism
+    - Created a function called boost() that removes a process from q2 and adds it to q0
+    - This function is called when the process has been in Q2 for more than 50 ticks
+    - This is measured by a TICKs variable which is part of the proc struct. TICK measures
+    the amount of ticks the proc has spent in a queue and gets reset to 0 each time it changes queues. 
+
+Workload description for your test programs
+
+NOTE: getpinfo() currently prints the process ID running in each queue for the first 500 ticks.
+This was chosen as it equates directly to the graph and hence makes graph validation easier. 
+There are also the equivalent versions of that function for process names and states to double check.
+However, the process stats were maintained and getinfo() can be changed to show that instead. 
+
+
+test1.c
+This test does equally I/O and computational task by forking. The parent does I/O and the child does
+computation concurrently. 
+
+test2.c
+This does a long computational-intensive task in a for loop; takes 2-3 seconds ti complete.
+
+test3.c 
+This calls the sleep() function within a for loop to constantly send the process to sleep before it uses 
+its time slice. 

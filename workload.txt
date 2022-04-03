@@ -1,0 +1,16 @@
+test1: 
+For test1, we first fork to a parent process and a child process. 
+The parent process is assigned with a I/O intensive work.
+More specifically, it is asked to open a file and keep writing to it.
+The child process is assigned with a CPU intensive work.
+It has a loop that runs for 20,000,000 times doing division.
+The graph shows its result because as parent process waits, the child process takes control and spent a lot of time in cpu. 
+
+test2: 
+For test2, we have a parent process that keeps forking for multiple times, and for both parent and child process they are
+assigned with CPU intensive job.
+The graph should presents boosting, which one process spend too much time waiting in q2 and upgrade to q0.
+
+test3: 
+For test3, we have one process that keeps sleeping.
+So in the graph we see that this process is always in q0 and not denoted. 
