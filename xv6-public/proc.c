@@ -112,6 +112,20 @@ allocproc(void)
   return 0;
 
 found:
+/************ MLFQ *************/
+  if(p->pid >0){  //delete unused from queue
+    
+    //check q0 
+    deleteQueue(&q0, p);
+
+    //check q1
+    deleteQueue(&q0, p);
+
+    //check q2
+    deleteQueue(&q0, p);
+  }
+
+  /************ END ************/
   p->state = EMBRYO;
   p->pid = nextpid++;
   p->priority = 0;
@@ -155,6 +169,7 @@ void userinit(void)
   /**************** MLFQ Modification ****************/
 
   // initialize queues and other variables
+
   TOTAL = 0;
 
   q0.end = 0;
@@ -433,12 +448,6 @@ void deleteQueue(struct pqueue *pq, struct proc *p)
     {
       break;
     }
-    
-    if (i == pq->end -1 && pq->queue[i] != p)
-    {
-      panic("No proc from queue");
-    }
-    
   }
   int firstFreeIndex = pq->end;
 
